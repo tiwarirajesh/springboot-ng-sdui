@@ -20,6 +20,8 @@ public class ContractService {
 
     public ContractDTO createContract(ContractDTO contractDTO) {
         Contract contract = Contract.builder()
+            .contractId(contractDTO.getContractId())
+            .customerName(contractDTO.getCustomerName())
                 .title(contractDTO.getTitle())
                 .description(contractDTO.getDescription())
                 .startDate(contractDTO.getStartDate())
@@ -39,6 +41,8 @@ public class ContractService {
                 .orElseThrow(() -> new RuntimeException("Contract not found with id: " + id));
 
         contract.setTitle(contractDTO.getTitle());
+        contract.setContractId(contractDTO.getContractId());
+        contract.setCustomerName(contractDTO.getCustomerName());
         contract.setDescription(contractDTO.getDescription());
         contract.setStartDate(contractDTO.getStartDate());
         contract.setEndDate(contractDTO.getEndDate());
@@ -97,6 +101,8 @@ public class ContractService {
     private ContractDTO mapToDTO(Contract contract) {
         return ContractDTO.builder()
                 .id(contract.getId())
+            .contractId(contract.getContractId())
+            .customerName(contract.getCustomerName())
                 .title(contract.getTitle())
                 .description(contract.getDescription())
                 .startDate(contract.getStartDate())

@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/contracts")
+@CrossOrigin(originPatterns = {"http://localhost:4200", "https://*.app.github.dev"})
 @RequiredArgsConstructor
 public class ContractController {
 

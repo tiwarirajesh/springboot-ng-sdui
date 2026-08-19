@@ -1,0 +1,74 @@
+<main class="workspace">
+  @if (loading()) {
+    <section class="state-panel" aria-live="polite">Loading screen...</section>
+  } @else if (error(); as message) {
+    <section class="state-panel error" role="alert">{{ message }}</section>
+  } @else if (screen(); as currentScreen) {
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Operations console</p>
+        <h1>{{ currentScreen.title }}</h1>
+      </div>
+      <span class="live-indicator">Live data</span>
+    </header>
+
+    <div class="content-grid">
+      @for (component of components(); track component.id) {
+        @switch (component.type) {
+          @case ('header') {
+            <section class="intro" [attr.data-component-id]="component.id">
+              <p>{{ componentText(component, 'subtitle') }}</p>
+            </section>
+          }
+          @case ('table') {
+            <section class="table-panel" [attr.data-component-id]="component.id">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Portfolio</p>
+                  <h2>All contracts</h2>
+                </div>
+                <span class="count">{{ contracts().length }} records</span>
+              </div>
+              <div class="table-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      @for (column of columns(component); track column.field) {
+                        <th scope="col">{{ column.label }}</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (contract of contracts(); track contract['id']) {
+                      <tr>
+                        @for (column of columns(component); track column.field) {
+                          <td [class.status-cell]="column.field === 'status'">
+                            @if (column.field === 'status') {
+                              <span class="status">{{ value(contract, column.field) }}</span>
+                            } @else {
+                              {{ value(contract, column.field) }}
+                            }
+                          </td>
+                        }
+                      </tr>
+                    } @empty {
+                      <tr>
+                        <td class="empty" [attr.colspan]="columns(component).length">No contracts found.</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          }
+          @case ('action') {
+            <button class="primary-action" type="button" [attr.data-action]="componentText(component, 'action')" [attr.data-component-id]="component.id">
+              <span aria-hidden="true">+</span>
+              {{ componentText(component, 'label') }}
+            </button>
+          }
+        }
+      }
+    </div>
+  }
+</main>

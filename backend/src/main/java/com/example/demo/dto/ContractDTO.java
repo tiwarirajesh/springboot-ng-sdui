@@ -13,6 +13,10 @@ public class ContractDTO {
 
     private Long id;
 
+    private String contractId;
+
+    private String customerName;
+
     @NotBlank(message = "Contract title is required")
     @Size(min = 3, max = 255, message = "Contract title must be between 3 and 255 characters")
     private String title;
